@@ -2,7 +2,8 @@
 ## R Studio
 #############
 .Rproj.user
-.RData*
+.RData
+.Rhistory
 
 
 #############
