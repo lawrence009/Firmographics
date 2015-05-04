@@ -1,16 +1,17 @@
 #script to explore firmographic data
 
+library(data.table)
 
 
 filelist <- list.files(pattern = '.csv$', full.names = T)
 
-df <- read.csv(filelist[1], na.strings = '')
+df <- read.csv(filelist[2], na.strings = '', as.is = T)
 
 head(df[, c('COMMON_CLIENT_ID_SS', 'LOCATION_NUMBER', 'SUBSIDIARY_NUMBER','ULTIMATE_PARENT_NUM')], 25)
 
 #ultimate and workup are Jeff's attempts to explore the infographics
-ultimate <- read.csv(filelist[2]) #1904 obs.
-workup <- read.csv(filelist[3]) #26358 obs.
+ultimate <- read.csv(filelist[3]) #1904 obs.
+workup <- read.csv(filelist[4]) #26358 obs.
 
 
 
@@ -31,3 +32,9 @@ getDups <- function(df, col = 1) {
 }
 
 dups <- getDups(df, 14) #col 14 is LOCATION_NUMBER
+
+
+#Global Customer Master
+dt2 <- data.table(read.csv(filelist[1], na.strings = '', as.is = T))
+dt2[, CUSTOMER_CREATION_DATE := as.Date(CUSTOMER_CREATION_DATE)]
+
