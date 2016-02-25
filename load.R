@@ -1,11 +1,12 @@
 #script to explore firmographic data
 
+require(bit64)
 library(data.table)
 
 
 filelist <- list.files(pattern = '.csv$', full.names = T)
 
-df <- read.csv(filelist[2], na.strings = '', as.is = T)
+df <- fread(filelist[2], na.strings = '')
 
 head(df[, c('COMMON_CLIENT_ID_SS', 'LOCATION_NUMBER', 'SUBSIDIARY_NUMBER','ULTIMATE_PARENT_NUM')], 25)
 
@@ -33,8 +34,30 @@ getDups <- function(df, col = 1) {
 
 dups <- getDups(df, 14) #col 14 is LOCATION_NUMBER
 
-
 #Global Customer Master
 dt2 <- data.table(read.csv(filelist[1], na.strings = '', as.is = T))
 dt2[, CUSTOMER_CREATION_DATE := as.Date(CUSTOMER_CREATION_DATE)]
 
+
+'
+SALES_VOLUME
+This field contains an alpha code corresponding to the estimated sales of the business in thousands of dollars.
+A         1 - 499
+B       500 - 999
+C     1,000 - 2,499
+D     2,500 - 4,999
+E     5,000 - 9,999
+F    10,000 - 19,999
+G    20,000 - 49,999
+H    50,000 - 99,999
+I   100,000 - 499,999
+J   500,000 - 999,999
+K   1,000,000 +
+'
+
+#
+x <- grep('^collection', df$PRIMARY_SIC_DESC, ignore.case = T)
+y <- grep('^collection', df$SECONDARY_SIC_DESC, ignore.case = T)
+
+z <- df[x, SALES_VOLUME]
+table(z)
