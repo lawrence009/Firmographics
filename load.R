@@ -56,8 +56,10 @@ K   1,000,000 +
 '
 
 #
-x <- grep('^collection', df$PRIMARY_SIC_DESC, ignore.case = T)
-y <- grep('^collection', df$SECONDARY_SIC_DESC, ignore.case = T)
+x <- grepl('^collection', df$PRIMARY_SIC_DESC, ignore.case = T)
+y <- grepl('^collection', df$SECONDARY_SIC_DESC, ignore.case = T)
 
-z <- df[x, SALES_VOLUME]
+z <- df[x | y, SALES_VOLUME]
 table(z)
+z <- df[x | y, SIEBEL_ID_PARENT_SS]
+length(z)
